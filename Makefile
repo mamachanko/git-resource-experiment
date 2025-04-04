@@ -58,3 +58,11 @@ pipeline:
 		--var github.token="$${GITHUB_TOKEN}" \
 		--var dockerhub.username="$${DOCKERHUB_USERNAME}" \
 		--var dockerhub.password="$${DOCKERHUB_PASSWORD}"
+
+.PHONY: destroy-pipeline
+destroy-pipeline:
+	fly \
+		--target $(CONCOURSE_TARGET) \
+		destroy-pipeline \
+		--team $(CONCOURSE_TEAM) \
+		--pipeline $(CONCOURSE_PIPELINE)
