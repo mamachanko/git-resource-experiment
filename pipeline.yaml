@@ -6,6 +6,9 @@ jobs:
           - get: src
             trigger: true
           - put: version
+            params:
+              bump: patch
+              file: version/version
           - get: image
       - task: do
         image: ci
@@ -25,10 +28,6 @@ jobs:
                 ls src
                 echo "here is the version:"
                 cat version/version
-      - put: version
-        params:
-          bump: patch
-          file: version/version
       - put: src
         params:
           repository: src
