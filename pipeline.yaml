@@ -8,17 +8,16 @@ jobs:
           - put: version
             params:
               bump: patch
-              file: version/version
           - get: image
       - task: do
-        image: ci
+        image: image
         config:
           platform: linux
           inputs:
             - name: src
             - name: version
           run:
-            path: /sh
+            path: sh
             args:
               - -euo
               - pipefail
