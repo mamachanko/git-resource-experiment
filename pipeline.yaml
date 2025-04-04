@@ -43,6 +43,7 @@ resources:
       branch: main
       username: token
       password: ((github.token))
+      fetch_tags: true
 
   - name: version
     type: semver
