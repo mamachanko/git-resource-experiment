@@ -1,0 +1,67 @@
+---
+jobs:
+  - name: do-tag
+    plan:
+      - in_parallel:
+          - get: src
+            trigger: true
+          - put: version
+          - get: image
+      - task: do
+        image: ci
+        config:
+          platform: linux
+          inputs:
+            - name: src
+            - name: version
+          run:
+            path: /sh
+            args:
+              - -euo
+              - pipefail
+              - -c
+              - |
+                echo "here is the src:"
+                ls src
+                echo "here is the version:"
+                cat version/version
+      - put: version
+        params:
+          bump: patch
+          file: version/version
+      - put: src
+        params:
+          repository: src
+          tag: version/version
+          rebase: true
+          force: true
+
+resources:
+  - name: src
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/mamachanko/git-resource-experiment
+      branch: main
+      username: token
+      password: ((github.token))
+
+  - name: version
+    type: semver
+    source:
+      driver: git
+      uri: https://github.com/mamachanko/git-resource-experiment
+      branch: version
+      username: token
+      password: ((github.token))
+      file: version
+
+  - name: image
+    type: registry-image
+    icon: docker
+    source:
+      repository: busybox
+      tag: latest
+      username: ((dockerhub.username))
+      password: ((dockerhub.password))
+
