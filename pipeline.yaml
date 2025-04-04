@@ -1,6 +1,6 @@
 ---
 jobs:
-  - name: do-tag
+  - name: bump-and-tag
     plan:
       - in_parallel:
           - get: src
